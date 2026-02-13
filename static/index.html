@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MeshCore Web</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📻</text></svg>">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <span class="logo">📻 MeshCore Web</span>
+            </div>
+            <div class="header-center">
+                <div class="connection-status" id="connectionStatus">
+                    <span class="status-dot disconnected"></span>
+                    <span class="status-text">Disconnected</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="icon-btn" id="themeToggle" title="Toggle theme">🌙</button>
+                <button class="icon-btn" id="settingsBtn" title="Settings">⚙️</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar" id="sidebar">
+                <nav class="nav-tabs">
+                    <button class="nav-tab active" data-tab="messages">💬 Messages</button>
+                    <button class="nav-tab" data-tab="contacts">👥 Contacts</button>
+                    <button class="nav-tab" data-tab="channels">📻 Channels</button>
+                    <button class="nav-tab" data-tab="device">📱 Device</button>
+                    <button class="nav-tab" data-tab="stats">📊 Stats</button>
+                </nav>
+            </aside>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Messages Panel -->
+                <section class="panel active" id="messagesPanel">
+                    <div class="panel-header">
+                        <h2>Messages</h2>
+                    </div>
+                    <div class="messages-layout">
+                        <div class="contacts-list" id="messageContacts">
+                            <div class="contact-controls">
+                                <select id="contactSort" class="control-select" title="Sort contacts">
+                                    <option value="latestMessage">📊 Latest Message</option>
+                                    <option value="latestHeard">📡 Latest Heard</option>
+                                    <option value="alphabetical">🔤 A-Z</option>
+                                </select>
+                                <select id="contactFilter" class="control-select" title="Filter contacts">
+                                    <option value="all">🔽 All</option>
+                                    <option value="favourites">⭐ Favourites</option>
+                                    <option value="companions">👤 Companions</option>
+                                    <option value="repeaters">📡 Repeaters</option>
+                                    <option value="rooms">🏠 Rooms</option>
+                                </select>
+                            </div>
+                            <div class="search-box">
+                                <input type="text" placeholder="🔍 Search contacts..." id="contactSearch">
+                            </div>
+                            <div class="contacts-scroll" id="contactsList">
+                                <p class="empty-state">Connect to see contacts</p>
+                            </div>
+                        </div>
+                        <div class="chat-area">
+                            <div class="chat-header" id="chatHeader">
+                                <span class="chat-title">Select a contact to start messaging</span>
+                            </div>
+                            <div class="messages-container" id="messagesContainer">
+                                <!-- Messages will be added here -->
+                            </div>
+                            <div class="message-input-area">
+                                <div class="input-options">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="retryCheck" checked> Auto-retry
+                                    </label>
+                                </div>
+                                <div class="input-row">
+                                    <input type="text" class="message-input" id="messageInput" 
+                                           placeholder="Type a message..." disabled>
+                                    <button class="send-btn" id="sendBtn" disabled>Send</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Contacts Panel -->
+                <section class="panel" id="contactsPanel">
+                    <div class="panel-header">
+                        <h2>Contacts</h2>
+                        <button class="btn" id="refreshContacts">🔄 Refresh</button>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table" id="contactsTable">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>Path</th>
+                                    <th>Last Seen</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="contactsTableBody">
+                                <tr><td colspan="5" class="empty-state">Connect to see contacts</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Channels Panel -->
+                <section class="panel" id="channelsPanel">
+                    <div class="panel-header">
+                        <h2>Channels</h2>
+                        <button class="btn" id="refreshChannels">🔄 Refresh</button>
+                    </div>
+                    <div class="channels-grid" id="channelsGrid">
+                        <!-- Channel cards will be added here -->
+                    </div>
+                </section>
+
+                <!-- Device Panel -->
+                <section class="panel" id="devicePanel">
+                    <div class="panel-header">
+                        <h2>Device</h2>
+                        <button class="btn" id="refreshDevice">🔄 Refresh</button>
+                    </div>
+                    <div class="device-content">
+                        <div class="card">
+                            <h3>🕐 Device Clock</h3>
+                            <div class="clock-display">
+                                <div class="clock-row">
+                                    <span class="clock-label">Device Time:</span>
+                                    <span class="clock-value" id="deviceTime">--</span>
+                                </div>
+                                <div class="clock-row">
+                                    <span class="clock-label">Local Time:</span>
+                                    <span class="clock-value" id="localTime">--</span>
+                                </div>
+                                <div class="clock-row">
+                                    <span class="clock-label">Difference:</span>
+                                    <span class="clock-value" id="timeDiff">--</span>
+                                </div>
+                            </div>
+                            <button class="btn primary" id="syncTimeBtn">🔄 Sync to Local Time</button>
+                        </div>
+                        <div class="card">
+                            <h3>Device Information</h3>
+                            <div class="info-grid" id="deviceInfo">
+                                <p class="empty-state">Connect to see device info</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Settings</h3>
+                            <form id="deviceSettingsForm" class="settings-form">
+                                <div class="form-group">
+                                    <label>Device Name</label>
+                                    <input type="text" id="deviceName" maxlength="31">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Latitude</label>
+                                        <input type="number" id="deviceLat" step="0.000001">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Longitude</label>
+                                        <input type="number" id="deviceLon" step="0.000001">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>TX Power (dBm)</label>
+                                    <input type="number" id="deviceTxPower" min="-10" max="22">
+                                </div>
+                                <button type="submit" class="btn primary">Save Settings</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Stats Panel -->
+                <section class="panel" id="statsPanel">
+                    <div class="panel-header">
+                        <h2>Statistics</h2>
+                        <button class="btn" id="refreshStats">🔄 Refresh</button>
+                    </div>
+                    <div class="stats-grid" id="statsGrid">
+                        <div class="stat-card">
+                            <span class="stat-label">TX Packets</span>
+                            <span class="stat-value" id="statTxPackets">--</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-label">RX Packets</span>
+                            <span class="stat-value" id="statRxPackets">--</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-label">TX Bytes</span>
+                            <span class="stat-value" id="statTxBytes">--</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-label">RX Bytes</span>
+                            <span class="stat-value" id="statRxBytes">--</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-label">Battery</span>
+                            <span class="stat-value" id="statBattery">--</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-label">Uptime</span>
+                            <span class="stat-value" id="statUptime">--</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Connection Modal -->
+        <div class="modal" id="connectionModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Connect to Device</h3>
+                    <button class="close-btn" id="closeConnectionModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Connection Type</label>
+                        <select id="connectionType">
+                            <option value="serial">Serial</option>
+                            <option value="tcp">TCP</option>
+                            <option value="ble">BLE</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Serial Options -->
+                    <div id="serialOptions" class="connection-options">
+                        <div class="form-group">
+                            <label>Port</label>
+                            <div class="input-with-btn">
+                                <select id="serialPort">
+                                    <option value="">Select port...</option>
+                                </select>
+                                <button type="button" class="btn" id="refreshPorts">🔄</button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Baudrate</label>
+                            <select id="serialBaudrate">
+                                <option value="9600">9600</option>
+                                <option value="19200">19200</option>
+                                <option value="38400">38400</option>
+                                <option value="57600">57600</option>
+                                <option value="115200" selected>115200</option>
+                                <option value="230400">230400</option>
+                                <option value="460800">460800</option>
+                                <option value="921600">921600</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- TCP Options -->
+                    <div id="tcpOptions" class="connection-options hidden">
+                        <div class="form-group">
+                            <label>Host</label>
+                            <input type="text" id="tcpHost" placeholder="192.168.1.1">
+                        </div>
+                        <div class="form-group">
+                            <label>Port</label>
+                            <input type="number" id="tcpPort" value="5000">
+                        </div>
+                        <div class="form-group">
+                            <label>Password (optional)</label>
+                            <input type="password" id="tcpPassword">
+                        </div>
+                    </div>
+                    
+                    <!-- BLE Options -->
+                    <div id="bleOptions" class="connection-options hidden">
+                        <div class="form-group">
+                            <label>Device Name</label>
+                            <input type="text" id="bleDeviceName" list="bleDeviceHistory" placeholder="MeshCore-XXXX" autocomplete="off">
+                            <datalist id="bleDeviceHistory"></datalist>
+                        </div>
+                        <div class="form-group">
+                            <label>PIN (optional)</label>
+                            <input type="text" id="blePin" maxlength="6">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" id="cancelConnect">Cancel</button>
+                    <button class="btn primary" id="doConnect">Connect</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div class="modal" id="settingsModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>⚙️ Application Settings</h3>
+                    <button class="close-btn" id="closeSettingsModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Theme</label>
+                        <select id="settingsTheme">
+                            <option value="dark">Dark</option>
+                            <option value="light">Light</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="settingsNotifications" checked>
+                            Show message notifications
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="settingsSounds">
+                            Play notification sounds
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" id="closeSettingsBtn">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Remote Management Modal -->
+        <div class="modal" id="remoteManagementModal">
+            <div class="modal-content modal-lg">
+                <div class="modal-header">
+                    <h3 id="remoteManagementTitle">📡 Remote Management</h3>
+                    <button class="close-btn" id="closeRemoteManagement">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="remote-info-grid" id="remoteInfoGrid">
+                        <!-- Remote device info will be displayed here -->
+                    </div>
+                    <div class="remote-actions">
+                        <h4>Actions</h4>
+                        <div class="btn-group">
+                            <button class="btn" id="remoteReboot">🔄 Reboot</button>
+                            <button class="btn" id="remoteAdvert">📡 Send Advert</button>
+                            <button class="btn" id="remoteResetPath">🔀 Reset Path</button>
+                        </div>
+                    </div>
+                    <div class="remote-telemetry">
+                        <h4>Telemetry</h4>
+                        <div class="telemetry-grid" id="remoteTelemetryGrid">
+                            <span class="info-label">Battery</span>
+                            <span class="info-value" id="remoteBattery">--</span>
+                            <span class="info-label">Temperature</span>
+                            <span class="info-value" id="remoteTemp">--</span>
+                            <span class="info-label">Humidity</span>
+                            <span class="info-value" id="remoteHumidity">--</span>
+                        </div>
+                        <button class="btn" id="refreshRemoteTelemetry">🔄 Refresh Telemetry</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" id="closeRemoteManagementBtn">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Container -->
+        <div id="toastContainer" class="toast-container"></div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
