@@ -18,12 +18,23 @@ Hey there! 👋 I'm ItsMeVino, and I built MeshPortal right here in Ottawa, Cana
 
 ## How to Get Started 🛠️
 
-### What You Need:
+### Option 1: Use the Install Script (Recommended!)
+We've made it super easy to get started with MeshPortal! Just download the appropriate install script for your operating system and run it:
+
+- **Linux**: `install_linux.sh`
+- **macOS**: `install_mac.sh`
+- **Windows**: `install_windows.bat`
+
+The script will handle everything for you, including installing dependencies and running the app. 🎉
+
+### Option 2: Manual Installation
+
+#### What You Need:
 - Python 3.9 or higher
 - Git
 - A MeshCore device (optional, but more fun!)
 
-### Steps:
+#### Steps:
 1. **Clone the Repo**:
    ```bash
    git clone https://github.com/vfortin99-ctrl/meshportal.git
