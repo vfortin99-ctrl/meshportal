@@ -26,6 +26,12 @@ echo Cloning the MeshPortal repository...
 git clone https://github.com/vfortin99-ctrl/meshportal.git
 cd meshportal
 
+REM Check for requirements.txt
+if not exist requirements.txt (
+    echo Missing requirements.txt file. Please ensure it exists in the repository.
+    exit /b 1
+)
+
 REM Set up a virtual environment
 echo Setting up a Python virtual environment...
 python -m venv venv
@@ -34,6 +40,13 @@ call venv\Scripts\activate
 REM Install dependencies
 echo Installing dependencies...
 pip install -r requirements.txt
+
+REM Check for uvicorn
+pip show uvicorn >nul 2>nul
+if %errorlevel% neq 0 (
+    echo Uvicorn is not installed. Installing it now...
+    pip install uvicorn
+)
 
 REM Run the application
 echo Starting MeshPortal...
