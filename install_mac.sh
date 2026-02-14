@@ -33,6 +33,7 @@ source venv/bin/activate
 echo "Installing dependencies..."
 pip install -r requirements.txt
 pip install meshcore  # Ensure the MeshCore library is installed
+pip install "uvicorn[standard]"  # Install WebSocket support for Uvicorn
 
 # Run the application
 echo "Starting MeshPortal..."
