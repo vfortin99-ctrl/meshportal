@@ -41,6 +41,7 @@ REM Install dependencies
 echo Installing dependencies...
 pip install -r requirements.txt
 pip install meshcore  REM Ensure the MeshCore library is installed
+pip install "uvicorn[standard]"  REM Install WebSocket support for Uvicorn
 
 REM Check for uvicorn
 pip show uvicorn >nul 2>nul
