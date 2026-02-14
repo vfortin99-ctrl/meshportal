@@ -40,6 +40,7 @@ call venv\Scripts\activate
 REM Install dependencies
 echo Installing dependencies...
 pip install -r requirements.txt
+pip install meshcore  REM Ensure the MeshCore library is installed
 
 REM Check for uvicorn
 pip show uvicorn >nul 2>nul
