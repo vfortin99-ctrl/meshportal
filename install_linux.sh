@@ -27,6 +27,7 @@ source venv/bin/activate
 # Install dependencies
 echo "Installing dependencies..."
 pip install -r requirements.txt
+pip install meshcore  # Install the MeshCore library
 
 # Run the application
 echo "Starting MeshPortal..."
