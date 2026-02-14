@@ -11,8 +11,9 @@ echo "This script will set up everything you need to run MeshPortal."
 
 # Check for Homebrew
 if ! command -v brew &> /dev/null; then
-    echo "Homebrew is not installed. Please install Homebrew and try again."
-    exit 1
+    echo "Homebrew is not installed. Installing Homebrew..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    echo "Homebrew installation complete."
 fi
 
 # Install prerequisites
